@@ -37,7 +37,7 @@ const MessageFormUI = ({setAttachment,message,handleChange,handleSubmit}) => {
         </div>
         <div className="message-form-icons">
             <Dropzone
-            acceptedFiles=".jpg,.jpeg,.png"
+            acceptedFiles=".jpg,.jpeg,.png, .xls, .xlsx, .csv"
             multiple={false}
             noClick={true}
             onDrop={(acceptedFiles)=>{

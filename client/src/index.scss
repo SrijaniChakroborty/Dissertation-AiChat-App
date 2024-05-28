@@ -767,13 +767,14 @@ color: $primary-600;
  flex-direction: row;
  justify-content: flex-end;
  padding: 0.5rem;
+ margin-bottom: 1rem;
 }
 
 .my-text-content {
   width: fit-content;
   padding: 0.5rem 0.5rem;
   background-color: #7fe5ff;
-  border-radius: 15px;
+  border-radius: 10px;
   color: #434343;
   text-wrap: wrap;
   overflow-x: auto;
@@ -785,13 +786,14 @@ color: $primary-600;
   flex-direction: row;
   justify-content: flex-start;
   padding: 0.5rem;
+  margin-bottom: 1rem;
  }
 
 .other-text-content {
   width: fit-content;
   padding: 0.5rem 0.5rem;
   background-color: #858585;
-  border-radius: 15px;
+  border-radius: 10px;
   color: #eaeaea;
   overflow-x: auto;
   text-wrap: wrap;
@@ -808,17 +810,19 @@ code::-webkit-scrollbar {
   background-color: #282c34;
   overflow-x: auto;
   max-width: 400px;
-  border-radius: 15px;
+  border-radius: 10px;
   scrollbar-width: 0;
   margin: 0.5rem 0.5rem;;
   overflow-wrap: break-word;
   overflow-x: auto;
+  margin-bottom: 1rem;
 }
 
 .code-message pre{
   margin: 0;
   padding: 0;
   line-height: 1;
+  padding: .5rem;
 }
 
 //SPECIAL CSS FOR THE PYTHON CODE HIGHLIGHTING
@@ -884,4 +888,22 @@ code::-webkit-scrollbar {
       height: 30px;
       padding: 2px 5px 0 5px;
     }
+}
+
+@media (min-width: 1024px){
+  .code-message {
+    max-width: 700px;
+  }
+  
+  .code-message pre{
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 1440px){
+  .code-message {
+    max-width: 800px;
+  }
 }
