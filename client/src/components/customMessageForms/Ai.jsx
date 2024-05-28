@@ -1,8 +1,10 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import MessageFormUI from './MessageFormUI'
 import { usePostAiTextMutation } from '@/state/api';
+import { getChat } from "react-chat-engine-advanced";
+import axios from 'axios';
 
-const Ai = ({props,activeChat}) => {
+const Ai = ({props, activeChat}) => {
     const [message,setMessage]=useState('');
     const [attachment,setAttachment]=useState('');
     const [trigger]=usePostAiTextMutation();
@@ -14,6 +16,40 @@ const Ai = ({props,activeChat}) => {
   //     const ISTTime = new Date(now.getTime() + ISTOffset);
   //     return ISTTime.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
   // };
+
+  useEffect(() => {
+    if (activeChat?.title.startsWith("AiChat_")) {
+
+      const headers = {
+        "Project-ID": import.meta.env.VITE_PROJECT_ID,
+        "User-Name": props.username,
+        "User-Secret": '1234'
+      };
+      const data = {
+        "username":"Ai_bot-Srijani"
+      };
+
+      // Check if a chat with the same title already exists
+      getChat(
+        "https://api.chatengine.io",
+        headers,
+        activeChat.id,
+        async existingChat => {
+          // console.log(activeChat)
+          // console.log(existingChat)
+          await axios.post(
+           `https://api.chatengine.io/chats/${existingChat.id}/people/`,
+           data,
+           {headers},
+          ).then(response => {
+            console.log('User added to chat:', response.data);
+          }).catch(error => {
+            console.log('Error adding user to chat:', error);
+          });
+        }
+      );
+    }
+  }, [activeChat?.id, props.username]);
 
     const handleSubmit=async()=>{
         const date=new Date().toISOString().replace("T"," ").replace("Z",`${Math.floor(Math.random()*1000)}+00:00`)

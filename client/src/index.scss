@@ -247,7 +247,23 @@ body,
 /* Chat List */
 .logout{
   background-color: #f44336;
+    position: fixed;
+    top: 13px;
+    right: 15px;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-block;
 }
+.logout .logout-icon{
+  display: none;
+}
+
 .logout:hover {
   background-color: #c30b0b; /* darker red on hover */
   transform: scale(1.05); /* slightly increase size on hover */
@@ -728,7 +744,7 @@ color: $primary-600;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar {
+.ce-message-list::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -742,4 +758,130 @@ color: $primary-600;
 
 ::-webkit-scrollbar-track:hover {
   background: $primary-700;
+}
+
+/*CUSTOM HEADER MESSAGE CSS*/
+
+.my-message {
+ display: flex;
+ flex-direction: row;
+ justify-content: flex-end;
+ padding: 0.5rem;
+}
+
+.my-text-content {
+  width: fit-content;
+  padding: 0.5rem 0.5rem;
+  background-color: #7fe5ff;
+  border-radius: 15px;
+  color: #434343;
+  text-wrap: wrap;
+  overflow-x: auto;
+  max-width: 400px;
+}
+
+.other-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0.5rem;
+ }
+
+.other-text-content {
+  width: fit-content;
+  padding: 0.5rem 0.5rem;
+  background-color: #858585;
+  border-radius: 15px;
+  color: #eaeaea;
+  overflow-x: auto;
+  text-wrap: wrap;
+  max-width: 400px;
+}
+
+code::-webkit-scrollbar {
+  height: 0;
+}
+
+/*CODE FORMATTING*/
+
+.code-message {
+  background-color: #282c34;
+  overflow-x: auto;
+  max-width: 400px;
+  border-radius: 15px;
+  scrollbar-width: 0;
+  margin: 0.5rem 0.5rem;;
+  overflow-wrap: break-word;
+  overflow-x: auto;
+}
+
+.code-message pre{
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+//SPECIAL CSS FOR THE PYTHON CODE HIGHLIGHTING
+
+.python-format{
+  font-size: small;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  
+}
+
+//THIS TWO ARE FOR HIGHLITING THE TAGS FOR THE HTML
+.code-message .hljs-tag {
+  color: #a9b7c6; /* Set the color of HTML tags */
+}
+.code-message .hljs-name {
+  color: #a9b7c6; /* Set the color of HTML tags */
+}
+
+/*HEADER FOR THE CODE BLOCK*/
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e1e1e;
+  padding: 0.5rem 0.7rem;
+  position: relative;
+}
+
+.copy-button {
+  border: none;
+  background: none;
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  font-size: small;
+  cursor: pointer;
+  color: #9b9b9b;
+}
+
+.language-header{
+  font-size: small;
+  color:rgb(144, 144, 144);
+}
+
+@media (max-width:1440px) {
+
+  .logout{
+    padding: 0;
+  }
+    .logout .logout-text{
+      display: none;
+    }
+
+    .logout .logout-icon{
+      display: inline;
+      align-items: center;
+      vertical-align: center;
+      height: 30px;
+      padding: 2px 5px 0 5px;
+    }
 }

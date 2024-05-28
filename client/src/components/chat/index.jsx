@@ -1,12 +1,14 @@
-//import React from "react";
 import {
   useMultiChatLogic,
   MultiChatSocket,
   MultiChatWindow,
+
 } from "react-chat-engine-advanced";
 import CustomeHeader from "@/components/customHeader";
 import StandardMessageForm from "@/components/customMessageForms/StandardMessageForm";
 import Ai from "@/components/customMessageForms/Ai"
+import MessageBubble from "./MessageBubble";
+import { ArrowRightStartOnRectangleIcon, TicketIcon } from "@heroicons/react/24/solid";
 
 const Chat = ({user, secret, setUser, setSecret}) => {
   const chatProps = useMultiChatLogic(
@@ -18,27 +20,15 @@ const Chat = ({user, secret, setUser, setSecret}) => {
     setUser(null);
     setSecret(null);
   };
+
   return (
-    <div style={{ flexBasis: "100%" }}>
+    <div style={{ flexBasis: "100%", alignItems:"center", verticalAlign:"center"}}>
        <button
         onClick={handleLogout}
         className="logout"
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          padding: "10px 20px",
-          // backgroundColor: "#f44336",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          zIndex: 1000,
-          fontWeight: "bold",
-          fontSize: "14px"
-        }}
       >
-        Logout
+        <ArrowRightStartOnRectangleIcon class="logout-icon"/>
+        <p className="logout-text">Logout</p>
       </button>
       <MultiChatSocket {...chatProps} />
       <MultiChatWindow
@@ -53,7 +43,7 @@ const Chat = ({user, secret, setUser, setSecret}) => {
             <StandardMessageForm props={props} activeChat={chatProps.chat} />
           );
         }}
-        //renderMessage={(props)=>{console.log(props); return (<></>)}}
+        renderMessage={(props)=> {return <MessageBubble props={props} activeChat={props.chat}/>}}
       />
     </div>
   );
