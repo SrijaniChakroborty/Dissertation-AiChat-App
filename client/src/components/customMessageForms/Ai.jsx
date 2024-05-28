@@ -5,7 +5,7 @@ import { getChat } from "react-chat-engine-advanced";
 import axios from 'axios';
 
 const Ai = ({props, activeChat}) => {
-    const [message,setMessage]=useState('');
+    const [message,setMessage]=useState(null);
     const [attachment,setAttachment]=useState('');
     const [trigger]=usePostAiTextMutation();
 

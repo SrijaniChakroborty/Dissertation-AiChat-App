@@ -8,7 +8,7 @@ import MessageFormUI from './MessageFormUI';
 const StandardMessageForm = ({props,activeChat}) => {
     // console.log('props',props)
     // console.log('activeChat',activeChat)
-    const [message,setMessage]=useState('');
+    const [message,setMessage]=useState(null);
     const [attachment,setAttachment]=useState('');
 
     const handleChange=(e)=>setMessage(e.target.value)

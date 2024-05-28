@@ -29,7 +29,7 @@ const formattedTime = ISTDate.toISOString().substring(11, 23); // Extract "12:24
 // Combine date, time, milliseconds, and timezone offset
 const formattedDateTime = formattedDate + " " + formattedTime + "+05:30";
   // chat.description=formattedDateTime;
-  console.log(typeof(chat.description));
+  // console.log(typeof(chat.description));
   return (
     <div className='chat-header'>
         <div className="flexbetween">

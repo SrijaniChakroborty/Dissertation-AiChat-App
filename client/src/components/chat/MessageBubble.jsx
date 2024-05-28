@@ -29,7 +29,7 @@ const MessageBubble = ({ props }) => {
   const messageText = props.message.text;
   //   console.log("message ",messageText)
   const codeBlockMatch = messageText.match(/```(\w+)\s*([\s\S]*?)\s*```/);
-    console.log(codeBlockMatch);
+    // console.log(codeBlockMatch);
   const formatCode = async (code, language) => {
     try {
       let formattedCode;
