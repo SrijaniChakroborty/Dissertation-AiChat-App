@@ -29,7 +29,7 @@ const MessageBubble = ({ props }) => {
   const messageText = props.message.text;
   //   console.log("message ",messageText)
   const codeBlockMatch = messageText.match(/```(\w+)\s*([\s\S]*?)\s*```/);
-  //   console.log(codeBlockMatch);
+    console.log(codeBlockMatch);
   const formatCode = async (code, language) => {
     try {
       let formattedCode;
@@ -123,9 +123,9 @@ const MessageBubble = ({ props }) => {
           {!isCopied ? "Copy" : "Copied!"}
         </button>
       </div>
-      {codeBlockMatch[1] === "python" ? (
+      {(codeBlockMatch[1] === "python" || codeBlockMatch[1]==='c'||codeBlockMatch[1]==='cpp')? (
         <SyntaxHighlighter
-          language="python"
+          language={codeBlockMatch[1]}
           wrapLines="true"
           wrapLongLines="true"
           style={darcula}
