@@ -872,6 +872,12 @@ code::-webkit-scrollbar {
   color:rgb(144, 144, 144);
 }
 
+@media (min-width:720px) {
+  .code-message {
+    max-width: 400px;
+  }
+}
+
 @media (max-width:1440px) {
 
   .logout{
@@ -891,15 +897,8 @@ code::-webkit-scrollbar {
 }
 
 @media (min-width: 1024px){
-  .code-message {
-    max-width: 700px;
-  }
+
   
-  .code-message pre{
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-  }
 }
 
 @media (min-width: 1440px){
