@@ -10,16 +10,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@heroicons/react": "^2.1.1",
     "@reduxjs/toolkit": "^2.2.1",
     "black": "^0.3.0",
+    "exceljs": "^4.4.0",
     "highlight.js": "^11.9.0",
+    "markdown-to-jsx": "^7.4.7",
     "react": "^18.2.0",
     "react-chat-engine-advanced": "^0.1.28",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-hot-toast": "^2.4.1",
+    "react-markdown": "^9.0.1",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.3",
+    "react-spinners": "^0.13.8",
     "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {

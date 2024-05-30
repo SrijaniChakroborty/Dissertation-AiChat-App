@@ -13,9 +13,11 @@ import babelPlugin from "prettier/plugins/babel";
 import estreePlugin from "prettier/plugins/estree";
 import { useRef, useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"; // using Prism for syntax highlighting
+import csv from "react-syntax-highlighter/dist/cjs/languages/prism/csv";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism"; // choose your preferred theme
 import prettierJava from "prettier-plugin-java";
-
+import MarkdownCode from "./MarkdownCode";
+import { LoadingOutlined } from '@ant-design/icons'
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("css", css);
 hljs.registerLanguage("html", html);
@@ -24,12 +26,12 @@ hljs.registerLanguage("java", java);
 
 const MessageBubble = ({ props }) => {
   const [isCopied, setIsCopied] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const codeRef = useRef(null);
   const messageText = props.message.text;
-  //   console.log("message ",messageText)
-  const codeBlockMatch = messageText.match(/```(\w+)\s*([\s\S]*?)\s*```/);
-    // console.log(codeBlockMatch);
+  console.log("message ", props.message);
+  const codeBlockMatch = props.message.text === 'this is an image' ? null : messageText?.match(/```(\w+)\s*([\s\S]*?)\s*```/);
+  // console.log(codeBlockMatch);
   const formatCode = async (code, language) => {
     try {
       let formattedCode;
@@ -88,12 +90,12 @@ const MessageBubble = ({ props }) => {
         codeRef.current.innerHTML =
           language === "html" ? formattedCode : hljs.highlightAuto(code).value;
         codeRef.current.textContent = formattedCode;
+
         hljs.highlightElement(codeRef.current);
       }
     }
     formattedCode();
   }, [messageText]);
-
 
   const handleCopyCode = () => {
     // Copy code to clipboard
@@ -104,50 +106,146 @@ const MessageBubble = ({ props }) => {
       .then(() => console.log("Code copied to clipboard"))
       .catch((err) => console.error("Error copying code to clipboard:", err));
 
-    setTimeout(()=>{setIsCopied(false)}, 4000);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 4000);
+  };
+
+  const renderTimestamp = () => (
+    <span className="timestamp">
+      {new Date(props.message.created).toLocaleTimeString()}
+    </span>
+  );
+
+  const renderAvatar = () => {
+    return (
+      <div className="avatar">{getInitials(props.message.sender.username)}</div>
+    );
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "";
+    const nameParts = name.split(" ");
+    if (nameParts.length === 1) return nameParts[0].charAt(0);
+    return nameParts[0].charAt(0) + nameParts[1].charAt(0);
   };
 
   return props.isMyMessage ? (
-    <div className="my-message">
-      <p className="my-text-content">{props.message.text}</p>
-    </div>
+    !codeBlockMatch ? (
+      <div className="my-message-container">
+        <div className="my-message">
+          {props.message.attachments.length != 0 ? (
+           <div className="my-message-image-container">
+           {isLoading && <LoadingOutlined size={60} color={"#123abc"} loading={isLoading} style={{padding:"10px", width:"90%"}}/>}
+           <img
+             className="my-message-image"
+             src={props.message.attachments[0].file}
+             alt="attachment"
+             onLoad={() => setIsLoading(false)}
+             style={isLoading ? { display: "none" } : {}}
+             onClick={()=>{window.open(props.message.attachments[0].file, '_blank')}}
+           />
+           <p className="my-text-content">{props.message.text===undefined ? '' : props.message.text}</p>
+         </div>
+         
+          ) : (
+            <p className="my-text-content">{props.message.text}</p>
+          )}
+        </div>
+        {renderTimestamp()}
+      </div> // this condition is for your message (when there's no code)
+    ) : (
+      <div className="my-message-container">
+        <div className="my-message">
+          <div className="code-message">
+            <div className="code-header">
+              <span className="language-header">{codeBlockMatch[1]}</span>
+              <button className="copy-button" onClick={handleCopyCode}>
+                {!isCopied ? "Copy" : "Copied!"}
+              </button>
+            </div>
+            <SyntaxHighlighter
+              language="csv"
+              style={darcula}
+              wrapLines="true"
+              wrapLongLines="true"
+              children={codeBlockMatch[2]}
+            />
+          </div>
+          {/* {renderAvatar(true)} */}
+        </div>
+        {renderTimestamp()}
+      </div> //this condition is for your message when there's csv data you're sending from an excel/csv file
+    )
   ) : !codeBlockMatch || codeBlockMatch == null ? (
-    <div className="other-message">
-      <p className="other-text-content">{props.message.text}</p>
-    </div>
-  ) : (
-    <div className="code-message">
-      <div className="code-header">
-        <span className="language-header">{codeBlockMatch[1]}</span>
-        <button className="copy-button" onClick={handleCopyCode}>
-          {!isCopied ? "Copy" : "Copied!"}
-        </button>
+    <div className="other-message-container">
+      <div className="other-message">
+        {renderAvatar()}
+        {props.message.attachments.length != 0 ? (
+          <img
+            className="my-message-image"
+            src={props.message.attachments[0].file}
+          />
+        ) : (
+          <p className="other-text-content">{props.message.text}</p>
+        )}
       </div>
-      {(codeBlockMatch[1] === "python" || codeBlockMatch[1]==='c'||codeBlockMatch[1]==='cpp')? (
-        <SyntaxHighlighter
-          language={codeBlockMatch[1]}
-          wrapLines="true"
-          wrapLongLines="true"
-          style={darcula}
-          className="python-format"
-        >
-          {codeBlockMatch[2]}
-        </SyntaxHighlighter>
-      ) : (
-        <pre>
-          <code
-            ref={codeRef}
-            className={codeBlockMatch[2] ? `language-${codeBlockMatch[1]}` : ""}
-          >
-            {codeBlockMatch[1] === "html" ? (
-              <span dangerouslySetInnerHTML={{ __html: codeBlockMatch[2] }} />
-            ) : (
-              codeBlockMatch[2]
-            )}
-          </code>
-        </pre>
-      )}
-    </div>
+      {renderTimestamp()}
+    </div> //this condition is for other's message when there's no code
+  ) : codeBlockMatch[1] === "markdown" ? (
+    <div className="other-message-container">
+      <div className="other-message">
+        {renderAvatar()}
+        <MarkdownCode message={codeBlockMatch} />
+      </div>
+      {renderTimestamp()}
+    </div> // this condition is for when other's send markdown content
+  ) : (
+    <div className="code-message-container">
+      <div className="code-avatar-container">
+        {renderAvatar()}
+        <div className="code-message">
+          <div className="code-header">
+            <span className="language-header">{codeBlockMatch[1]}</span>
+            <button className="copy-button" onClick={handleCopyCode}>
+              {!isCopied ? "Copy" : "Copied!"}
+            </button>
+          </div>
+          {codeBlockMatch[1] === "python" ||
+          codeBlockMatch[1] === "c" ||
+          codeBlockMatch[1] === "cpp" ||
+          codeBlockMatch[1]==="csv"? (
+            <SyntaxHighlighter
+              language={codeBlockMatch[1]}
+              wrapLines={true}
+              wrapLongLines={true}
+              style={darcula}
+              className="python-format"
+            >
+              {codeBlockMatch[2]}
+            </SyntaxHighlighter>
+          ) : (
+            <pre>
+              <code
+                ref={codeRef}
+                className={
+                  codeBlockMatch[2] ? `language-${codeBlockMatch[1]}` : ""
+                }
+              >
+                {codeBlockMatch[1] === "html" ? (
+                  <span
+                    dangerouslySetInnerHTML={{ __html: codeBlockMatch[2] }}
+                  />
+                ) : (
+                  codeBlockMatch[2]
+                )}
+              </code>
+            </pre>
+          )}
+        </div>
+      </div>
+      {renderTimestamp()}
+    </div> //finally when other's message has code in it
   );
 };
 

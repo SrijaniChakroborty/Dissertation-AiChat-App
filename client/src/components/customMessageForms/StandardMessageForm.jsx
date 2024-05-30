@@ -6,26 +6,35 @@ import React,{ useState } from 'react'
 import MessageFormUI from './MessageFormUI';
 
 const StandardMessageForm = ({props,activeChat}) => {
-    // console.log('props',props)
-    // console.log('activeChat',activeChat)
+
     const [message,setMessage]=useState(null);
+    // const [msg, setMsg] = useState(null);
     const [attachment,setAttachment]=useState('');
 
-    const handleChange=(e)=>setMessage(e.target.value)
-
-    const handleSubmit=async()=>{
-        const date=new Date();
-        const adjustedDate = new Date(date.getTime() + (5 * 60 * 60 * 1000) + (30 * 60 * 1000)).toISOString().replace("T"," ").replace("Z",`${Math.floor(Math.random()*1000)}+00:00`);
-        console.log(new Date().toISOString());
-        console.log(date)
+    const handleChange = (e) => {
+      const value = e.target.value;
+      setMessage(
+        value.includes("```csv")
+          ? value.replace(/```csv\s*([\s\S]*?)\s*```/, "$1")
+          : value
+      );
+      // console.log("messssage", message)
+    };
+    // console.log('MESSAGE ', message)
+    const handleSubmit=async(msg)=>{
+      const date=new Date().toISOString().replace("T"," ").replace("Z",`${Math.floor(Math.random()*1000)}+00:00`)
+        // const adjustedDate = new Date(date.getTime() );
+        setMessage(msg);
+        console.log('attachment',attachment)
         const at=attachment?[{blob:attachment,file:attachment.name}]:[];
         const form={
             attachments:at,
-            created:adjustedDate,
+            created:date,
             sender_username:props.username,
-            text:message,
+            text:msg,
             activeChatId:activeChat.id,
         }
+
         props.onSubmit(form);
         setMessage("");
         setAttachment("");

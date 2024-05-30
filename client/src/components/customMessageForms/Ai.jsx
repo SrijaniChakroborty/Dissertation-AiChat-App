@@ -9,14 +9,15 @@ const Ai = ({props, activeChat}) => {
     const [attachment,setAttachment]=useState('');
     const [trigger]=usePostAiTextMutation();
 
-    const handleChange=(e)=>setMessage(e.target.value)
-  //   const getCurrentISTTimestamp = () => {
-  //     const now = new Date();
-  //     const ISTOffset = 330 * 60000; // IST is UTC+5:30
-  //     const ISTTime = new Date(now.getTime() + ISTOffset);
-  //     return ISTTime.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
-  // };
-
+    const handleChange = (e) => {
+      const value = e.target.value;
+      setMessage(
+        value.includes("```csv")
+          ? value.replace(/```csv\s*([\s\S]*?)\s*```/, "$1")
+          : value
+      );
+    };
+  
   useEffect(() => {
     if (activeChat?.title.startsWith("AiChat_")) {
 
@@ -51,15 +52,16 @@ const Ai = ({props, activeChat}) => {
     }
   }, [activeChat?.id, props.username]);
 
-    const handleSubmit=async()=>{
+    const handleSubmit=async(msg)=>{
         const date=new Date().toISOString().replace("T"," ").replace("Z",`${Math.floor(Math.random()*1000)}+00:00`)
         //const date=getCurrentISTTimestamp();
+        setMessage(msg);
         const at=attachment?[{blob:attachment,file:attachment.name}]:[];
         const form={
             attachments:at,
             created:date,
             sender_username:props.username,
-            text:message,
+            text:msg,
             activeChatId:activeChat.id,
         }
         props.onSubmit(form);

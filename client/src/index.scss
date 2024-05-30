@@ -28,6 +28,10 @@ body,
   font-family: "Rubik", sans-serif;
 }
 
+:root{
+  --feed-height: 100vh;
+}
+
 .layout {
   width: 100%;
   display: flex;
@@ -242,6 +246,7 @@ body,
 .ce-chat-engine {
   color: $tertiary-50 !important;
   font-family: "Rubik" !important;
+  height: 100vh !important;
 }
 
 /* Chat List */
@@ -313,61 +318,71 @@ body,
   height: 22px !important;
 }
 
-.message-form-preview {
-  position: relative;
-}
-
-.message-form-icon-x {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: $primary-500 !important;
-  width: 15px !important;
-  height: 15px !important;
-  cursor: pointer;
-}
-
 .message-form-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
-  height: 105px;
-  gap: 8px;
+  height: 110px;
+  position: relative;
 }
 
 .message-form {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid $primary-400 !important;
+  flex-direction: row;
   border-radius: 7px !important;
-  padding: 5px 15px 5px 20px !important;
+  padding: 10px 5px !important;
   background: none;
+  margin:0px 10px 20px 10px;
   width: 90%;
 }
 
+.message-form-preview {
+  position: relative;
+  transform: translateY(-20px);
+  justify-content: left;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  background-color: rgba(112, 143, 148, 0.5);
+  backdrop-filter: blur(1px);
+}
+
+.message-form-icon-x {
+  color: red;
+  width: 24px !important;
+  height: 24px !important;
+  cursor: pointer;
+  transform: translate(10px, -10px);
+  z-index: 2;
+
+}
 .message-form-preview-image {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
+  border-radius: 5px;
+  position: relative;
 }
 
 .message-form-input-container {
   flex-basis: 100%;
   position: relative;
-  top: -10px;
+  // top: -10px;
 }
 
 .message-form-input,
 .message-form-input:focus,
 .message-form-input:active {
   all: unset;
-  position: absolute;
-  top: 0;
-  left: 0;
   color: $tertiary-50 !important;
-  z-index: 2 !important;
   width: 100% !important;
+  overflow-y: scroll;
+  transform: translateY(10px);
+  min-height: 50px;
+  height: 40px;
 }
 
 .message-form-assist {
@@ -378,7 +393,7 @@ body,
   left: 0;
   color: $gray-300 !important;
   // background: transparent;
-  z-index: 1;
+  // z-index: 1;
 }
 
 .message-form-icon-airplane {
@@ -499,11 +514,11 @@ body,
 .ce-chat-feed-column {
   overflow-y: hidden !important;
   border: none !important;
-  
 }
 
 .ce-chat-feed {
   background-color: $primary-700 !important;
+  height: var(--feed-height)
 }
 
 .chat-header {
@@ -716,9 +731,9 @@ color: $primary-600;
 
 .ce-member-delete-button {
   border-radius: 5px !important;
-  background-color: $primary-800 !important;
-  color: $primary-500 !important;
-  border: 1px solid $primary-400 !important;
+  // background-color: $primary-800 !important;
+  // color: $primary-500 !important;
+  border: 1px solid !important;
   top: 6px !important;
 }
 
@@ -733,10 +748,9 @@ color: $primary-600;
 
 .ce-danger-button {
   border-radius: 5px !important;
-  background-color: $primary-800 !important;
-  color: $primary-400 !important;
-  border: 1px solid $primary-400 !important;
-  // cursor:none;
+  border: 2px solid !important;
+  fill: red;
+  font-weight: bold;
 }
 
 #ce-settings-photos-dropdown .ce-dropdown-children {
@@ -746,6 +760,11 @@ color: $primary-600;
 /* Scrollbar */
 .ce-message-list::-webkit-scrollbar {
   width: 10px;
+}
+
+::-webkit-scrollbar{
+  all:unset;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
@@ -766,10 +785,25 @@ color: $primary-600;
  display: flex;
  flex-direction: row;
  justify-content: flex-end;
- padding: 0.5rem;
- margin-bottom: 1rem;
+ margin-right: 10px;
+//  margin-bottom: 1rem;
 }
 
+.my-message-image{
+ max-width: 150px;
+ max-height: 150px;
+ aspect-ratio: inherit;
+  border-radius: 5px;
+  padding-bottom: .2rem;
+  cursor: pointer;
+}
+
+.my-message-image-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
 .my-text-content {
   width: fit-content;
   padding: 0.5rem 0.5rem;
@@ -785,8 +819,8 @@ color: $primary-600;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+  // padding: 0.25rem;
+  // margin-bottom: 1rem;
  }
 
 .other-text-content {
@@ -795,16 +829,90 @@ color: $primary-600;
   background-color: #858585;
   border-radius: 10px;
   color: #eaeaea;
-  overflow-x: auto;
-  text-wrap: wrap;
+  word-wrap: break-word;
+  word-break: keep-all;
+  white-space-collapse: preserve-spaces;
+  text-wrap: pretty;
   max-width: 400px;
+}
+
+.markdown-content{
+  padding: 1rem 2rem ; 
+}
+
+.insights-list{
+  font-size: 15px;
+  padding: .18rem;
+  list-style-type: decimal;
+  line-height: 1.1;
+}
+.insights-list::marker{
+  color: #79ebff;
+  font-weight: bold;
 }
 
 code::-webkit-scrollbar {
   height: 0;
 }
 
+.my-message-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-bottom: 1rem;
+  margin: 1rem;
+}
+
+.other-message-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  // margin: .5rem;
+  vertical-align: text-top;
+}
+
+.other-message-container .timestamp{
+  margin-left: 28px;
+}
+
+.my-message-container .timestamp{
+  margin-right: 10px;
+}
+
+.timestamp{
+  padding-top: 0.2rem;
+  font-size: x-small;
+  color: #858585;
+}
+
+.avatar {
+  width: 20px; /* Adjust the size as needed */
+  height: 20px; /* Adjust the size as needed */
+  border-radius: 50%;
+  background-color: #007bff; /* Background color of the avatar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; 
+  font-size: 14px; /* Adjust font size as needed */
+  font-weight: normal;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
+
 /*CODE FORMATTING*/
+
+.code-avatar-container{
+  display: flex;
+  flex-direction: row;
+}
 
 .code-message {
   background-color: #282c34;
@@ -812,10 +920,8 @@ code::-webkit-scrollbar {
   max-width: 400px;
   border-radius: 10px;
   scrollbar-width: 0;
-  margin: 0.5rem 0.5rem;;
   overflow-wrap: break-word;
   overflow-x: auto;
-  margin-bottom: 1rem;
 }
 
 .code-message pre{
