@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {ChatBubbleLeftRightIcon, PhoneIcon} from "@heroicons/react/24/solid";
 
-const CustomeHeader = ({chat}) => {
+const CustomHeader = ({chat}) => {
   // const [searchKeyword, setSearchKeyword] = useState('');
   // const [searchedChat, setSearchedChat] = useState(null);
   const handleCall = () => {
@@ -55,4 +55,4 @@ const formattedDateTime = formattedDate + " " + formattedTime + "+05:30";
   )
 }
 
-export default CustomeHeader
+export default CustomHeader
