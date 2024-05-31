@@ -17,7 +17,7 @@ import csv from "react-syntax-highlighter/dist/cjs/languages/prism/csv";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism"; // choose your preferred theme
 import prettierJava from "prettier-plugin-java";
 import MarkdownCode from "./MarkdownCode";
-import { LoadingOutlined } from '@ant-design/icons'
+import { LoadingOutlined } from "@ant-design/icons";
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("css", css);
 hljs.registerLanguage("html", html);
@@ -27,11 +27,16 @@ hljs.registerLanguage("java", java);
 const MessageBubble = ({ props }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [filetype, setFileType] = useState('');
   const codeRef = useRef(null);
   const messageText = props.message.text;
   console.log("message ", props.message);
-  const codeBlockMatch = props.message.text === 'this is an image' ? null : messageText?.match(/```(\w+)\s*([\s\S]*?)\s*```/);
-  // console.log(codeBlockMatch);
+  const codeBlockMatch =
+    props.message.text === " "
+      ? null
+      : messageText?.match(/```(\w+)\s*([\s\S]*?)\s*```/);
+  console.log("CODE", codeBlockMatch);
+
   const formatCode = async (code, language) => {
     try {
       let formattedCode;
@@ -135,19 +140,29 @@ const MessageBubble = ({ props }) => {
       <div className="my-message-container">
         <div className="my-message">
           {props.message.attachments.length != 0 ? (
-           <div className="my-message-image-container">
-           {isLoading && <LoadingOutlined size={60} color={"#123abc"} loading={isLoading} style={{padding:"10px", width:"90%"}}/>}
-           <img
-             className="my-message-image"
-             src={props.message.attachments[0].file}
-             alt="attachment"
-             onLoad={() => setIsLoading(false)}
-             style={isLoading ? { display: "none" } : {}}
-             onClick={()=>{window.open(props.message.attachments[0].file, '_blank')}}
-           />
-           <p className="my-text-content">{props.message.text===undefined ? '' : props.message.text}</p>
-         </div>
-         
+            <div className="my-message-image-container">
+              {isLoading && (
+                <LoadingOutlined
+                  size={60}
+                  color={"#123abc"}
+                  loading={isLoading}
+                  style={{ padding: "10px", width: "90%" }}
+                />
+              )}
+              <img
+                className="my-message-image"
+                src={props.message.attachments[0].file}
+                alt="attachment"
+                onLoad={() => setIsLoading(false)}
+                style={isLoading ? { display: "none" } : {}}
+                onClick={() => {
+                  window.open(props.message.attachments[0].file, "_blank");
+                }}
+              />
+              <p className="my-text-content">
+                {props.message.text === undefined ? "" : props.message.text}
+              </p>
+            </div>
           ) : (
             <p className="my-text-content">{props.message.text}</p>
           )}
@@ -214,7 +229,7 @@ const MessageBubble = ({ props }) => {
           {codeBlockMatch[1] === "python" ||
           codeBlockMatch[1] === "c" ||
           codeBlockMatch[1] === "cpp" ||
-          codeBlockMatch[1]==="csv"? (
+          codeBlockMatch[1] === "csv" ? (
             <SyntaxHighlighter
               language={codeBlockMatch[1]}
               wrapLines={true}

@@ -19,6 +19,7 @@ const MessageFormUI = ({
   const [preview, setPreview] = useState("");
   const [csvData, setCSV] = useState(null);
   const [isCSV, setIsCSV] = useState(false);
+  const [isPDF, setIsPDF] = useState(false); 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent the default form submission
@@ -104,7 +105,7 @@ const MessageFormUI = ({
           {/* </div> */}
           <div className="message-form-icons">
             <Dropzone
-              acceptedFiles=".jpg,.jpeg,.png,.xls,.xlsx,.csv"
+              acceptedFiles=".jpg,.jpeg,.png,.xls,.xlsx,.csv,.pdf"
               multiple={false}
               noClick={!!preview}
               onDrop={(acceptedFiles) => {

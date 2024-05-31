@@ -13,6 +13,7 @@ const StandardMessageForm = ({props,activeChat}) => {
 
     const handleChange = (e) => {
       const value = e.target.value;
+
       setMessage(
         value.includes("```csv")
           ? value.replace(/```csv\s*([\s\S]*?)\s*```/, "$1")
@@ -25,6 +26,7 @@ const StandardMessageForm = ({props,activeChat}) => {
       const date=new Date().toISOString().replace("T"," ").replace("Z",`${Math.floor(Math.random()*1000)}+00:00`)
         // const adjustedDate = new Date(date.getTime() );
         setMessage(msg);
+        console.log(msg);
         console.log('attachment',attachment)
         const at=attachment?[{blob:attachment,file:attachment.name}]:[];
         const form={
@@ -32,7 +34,7 @@ const StandardMessageForm = ({props,activeChat}) => {
             created:date,
             sender_username:props.username,
             text:msg,
-            activeChatId:activeChat.id,
+            activeChatId:activeChat.id
         }
 
         props.onSubmit(form);
