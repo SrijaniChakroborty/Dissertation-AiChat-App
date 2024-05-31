@@ -369,6 +369,13 @@ body,
   position: relative;
 }
 
+.pdf-preview{
+  padding:  0.5rem;
+  background-color: #6d6d6d;
+  color:whitesmoke;
+  border-radius: 5px;
+}
+
 .message-form-input-container {
   flex-basis: 100%;
   position: relative;
@@ -806,6 +813,7 @@ color: $primary-600;
   justify-content: flex-end;
   align-items: flex-end;
 }
+
 .my-text-content {
   width: fit-content;
   padding: 0.5rem 0.5rem;
@@ -815,6 +823,25 @@ color: $primary-600;
   text-wrap: wrap;
   overflow-x: auto;
   max-width: 400px;
+}
+
+
+.pdf-message{
+  cursor: pointer;
+  
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.my-pdf-message{
+  background-color: #7fe5ff;
+  color: rgb(87, 87, 87);
+}
+
+.other-pdf-message{
+  background-color: #868686;
+  color: rgb(219, 219, 219);
 }
 
 .other-message {
@@ -889,6 +916,7 @@ code::-webkit-scrollbar {
 .code-message-container .timestamp{
   margin-left: 28px;
 }
+
 .timestamp{
   padding-top: 0.2rem;
   font-size: x-small;

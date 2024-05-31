@@ -17,9 +17,9 @@ const StandardMessageForm = ({props,activeChat}) => {
       setMessage(
         value.includes("```csv")
           ? value.replace(/```csv\s*([\s\S]*?)\s*```/, "$1")
-          : value
+          : (value.includes("```pdf") ? '' : value)
       );
-      // console.log("messssage", message)
+      console.log("messssage", message)
     };
     // console.log('MESSAGE ', message)
     const handleSubmit=async(msg)=>{

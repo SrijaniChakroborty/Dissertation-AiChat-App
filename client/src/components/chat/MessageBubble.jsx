@@ -27,10 +27,11 @@ hljs.registerLanguage("java", java);
 const MessageBubble = ({ props }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [filetype, setFileType] = useState('');
+  const [filetype, setFileType] = useState("");
   const codeRef = useRef(null);
   const messageText = props.message.text;
   console.log("message ", props.message);
+
   const codeBlockMatch =
     props.message.text === " "
       ? null
@@ -85,6 +86,9 @@ const MessageBubble = ({ props }) => {
     }
   };
 
+  const attachment = props.message.attachments[0];
+  console.log(attachment);
+
   useEffect(() => {
     async function formattedCode() {
       if (codeRef.current && codeBlockMatch) {
@@ -101,6 +105,12 @@ const MessageBubble = ({ props }) => {
     }
     formattedCode();
   }, [messageText]);
+
+  useEffect(() => {
+    if (props.message.attachments && props.message.attachments[0]?.file && props.message.attachments.length > 0 && props.message.attachments[0].file.includes('https://')) {
+      setIsLoading(false);
+    }
+  }, [props.message.attachments]);
 
   const handleCopyCode = () => {
     // Copy code to clipboard
@@ -128,6 +138,13 @@ const MessageBubble = ({ props }) => {
     );
   };
 
+  const extractFileNameFromURL = (url) => {
+    const urlParts = url.split("/");
+    const lastPart = urlParts[urlParts.length - 1];
+    const fileName = lastPart.split("?")[0];
+    return fileName;
+  };
+
   const getInitials = (name) => {
     if (!name) return "";
     const nameParts = name.split(" ");
@@ -149,6 +166,7 @@ const MessageBubble = ({ props }) => {
                   style={{ padding: "10px", width: "90%" }}
                 />
               )}
+
               <img
                 className="my-message-image"
                 src={props.message.attachments[0].file}
@@ -172,25 +190,44 @@ const MessageBubble = ({ props }) => {
     ) : (
       <div className="my-message-container">
         <div className="my-message">
-          <div className="code-message">
-            <div className="code-header">
-              <span className="language-header">{codeBlockMatch[1]}</span>
-              <button className="copy-button" onClick={handleCopyCode}>
-                {!isCopied ? "Copy" : "Copied!"}
-              </button>
+          {codeBlockMatch[1] === "pdf" ? ( //pdf file bubble
+            !isLoading ? (
+              <div
+                className="pdf-message my-pdf-message"
+                onClick={() => {
+                  window.open(props.message.attachments[0].file, "_blank");
+                }}
+              >
+                {extractFileNameFromURL(props.message.attachments[0].file)}
+              </div>
+            ) : (
+              <LoadingOutlined
+                size={60}
+                color={"#123abc"}
+                loading={isLoading}
+                style={{ padding: "10px", width: "90%" }}
+              />
+            )
+          ) : (
+            <div className="code-message">
+              <div className="code-header">
+                <span className="language-header">{codeBlockMatch[1]}</span>
+                <button className="copy-button" onClick={handleCopyCode}>
+                  {!isCopied ? "Copy" : "Copied!"}
+                </button>
+              </div>
+              <SyntaxHighlighter
+                language="csv"
+                style={darcula}
+                wrapLines="true"
+                wrapLongLines="true"
+                children={codeBlockMatch[2]}
+              />
             </div>
-            <SyntaxHighlighter
-              language="csv"
-              style={darcula}
-              wrapLines="true"
-              wrapLongLines="true"
-              children={codeBlockMatch[2]}
-            />
-          </div>
-          {/* {renderAvatar(true)} */}
+          )}
         </div>
         {renderTimestamp()}
-      </div> //this condition is for your message when there's csv data you're sending from an excel/csv file
+      </div> //this condition is for your message when there's csv and pdf data you're sending from an excel/csv or pdf file
     )
   ) : !codeBlockMatch || codeBlockMatch == null ? (
     <div className="other-message-container">
@@ -219,43 +256,66 @@ const MessageBubble = ({ props }) => {
     <div className="code-message-container">
       <div className="code-avatar-container">
         {renderAvatar()}
-        <div className="code-message">
-          <div className="code-header">
-            <span className="language-header">{codeBlockMatch[1]}</span>
-            <button className="copy-button" onClick={handleCopyCode}>
-              {!isCopied ? "Copy" : "Copied!"}
-            </button>
-          </div>
-          {codeBlockMatch[1] === "python" ||
-          codeBlockMatch[1] === "c" ||
-          codeBlockMatch[1] === "cpp" ||
-          codeBlockMatch[1] === "csv" ? (
-            <SyntaxHighlighter
-              language={codeBlockMatch[1]}
-              wrapLines={true}
-              wrapLongLines={true}
-              style={darcula}
-              className="python-format"
-            >
-              {codeBlockMatch[2]}
-            </SyntaxHighlighter>
-          ) : (
-            <pre>
-              <code
-                ref={codeRef}
-                className={
-                  codeBlockMatch[2] ? `language-${codeBlockMatch[1]}` : ""
-                }
+        <div className="other-message">
+          {codeBlockMatch[1] === "pdf" ? ( //pdf file bubble
+            !isLoading ? (
+              <div
+                className="other-pdf-message pdf-message"
+                onClick={() => {
+                  window.open(props.message.attachments[0].file, "_blank");
+                }}
+
               >
-                {codeBlockMatch[1] === "html" ? (
-                  <span
-                    dangerouslySetInnerHTML={{ __html: codeBlockMatch[2] }}
-                  />
-                ) : (
-                  codeBlockMatch[2]
-                )}
-              </code>
-            </pre>
+                {extractFileNameFromURL(props.message.attachments[0].file)}
+              </div>
+            ) : (
+              <LoadingOutlined
+                size={60}
+                color={"#123abc"}
+                loading={isLoading}
+                style={{ padding: "10px", width: "90%" }}
+              />
+            )
+          ) : (
+            <div className="code-message">
+              <div className="code-header">
+                <span className="language-header">{codeBlockMatch[1]}</span>
+                <button className="copy-button" onClick={handleCopyCode}>
+                  {!isCopied ? "Copy" : "Copied!"}
+                </button>
+              </div>
+              {codeBlockMatch[1] === "python" ||
+              codeBlockMatch[1] === "c" ||
+              codeBlockMatch[1] === "cpp" ||
+              codeBlockMatch[1] === "csv" ? (
+                <SyntaxHighlighter
+                  language={codeBlockMatch[1]}
+                  wrapLines={true}
+                  wrapLongLines={true}
+                  style={darcula}
+                  className="python-format"
+                >
+                  {codeBlockMatch[2]}
+                </SyntaxHighlighter>
+              ) : (
+                <pre>
+                  <code
+                    ref={codeRef}
+                    className={
+                      codeBlockMatch[2] ? `language-${codeBlockMatch[1]}` : ""
+                    }
+                  >
+                    {codeBlockMatch[1] === "html" ? (
+                      <span
+                        dangerouslySetInnerHTML={{ __html: codeBlockMatch[2] }}
+                      />
+                    ) : (
+                      codeBlockMatch[2]
+                    )}
+                  </code>
+                </pre>
+              )}
+            </div>
           )}
         </div>
       </div>
